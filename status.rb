@@ -45,7 +45,7 @@ def check_hosts
     end
 
     if up?('192.168.50.11')
-        unless `vagrant ssh jenkins1 -c "service jenkins status | grep Active" 2>&1`.include? "inactive"
+        unless `vagrant ssh jenkins-master-1 -c "service jenkins status | grep Active" 2>&1`.include? "inactive"
             $jenkins_master_1 = true
         else
             $jenkins_master_1 = false
@@ -53,7 +53,7 @@ def check_hosts
     end
 
     if up?('192.168.50.12')
-        unless `vagrant ssh jenkins2 -c "service jenkins status | grep Active" 2>&1`.include? "inactive"
+        unless `vagrant ssh jenkins-master-2 -c "service jenkins status | grep Active" 2>&1`.include? "inactive"
             $jenkins_master_2 = true
         else
             $jenkins_master_2 = false
@@ -61,13 +61,13 @@ def check_hosts
     end
 
     if up?('192.168.50.20')
-        if `vagrant ssh jenkins_slave_linux -c "ps aux | grep swarm" 2>&1`.include? "swarm-client"
+        if `vagrant ssh jenkins-slave-linux -c "ps aux | grep swarm" 2>&1`.include? "swarm-client"
             $jenkins_slave_linux = true
         else
             $jenkins_slave_linux = false
         end
 
-        if `vagrant ssh jenkins_slave_linux -c "tail /tmp/swarm.log" 2>&1`.include? "INFO: Connected"
+        if `vagrant ssh jenkins-slave-linux -c "tail /tmp/swarm.log" 2>&1`.include? "INFO: Connected"
             $jenkins_slave_linux_agent = "Connected"
         else
             $jenkins_slave_linux_agent = "Disconnected"
