@@ -1,0 +1,41 @@
+global
+        log /var/log   local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
+        user haproxy
+        group haproxy
+        daemon
+
+defaults
+        mode http
+        option http-server-close
+        timeout client 20s
+        timeout server 20s
+        timeout connect 4s
+
+frontend WEB
+        bind *:8080 name app
+        default_backend JENKINS_WEB
+
+backend JENKINS_WEB
+        stick-table type ip size 1 nopurge
+        stick on dst
+        server jenkins1 192.168.50.11:8080 check
+        server jenkins2 192.168.50.12:8080 check backup
+
+frontend JNLP
+        bind *:5000
+        option tcplog
+        mode tcp
+        timeout client 15m
+        use_backend Jenkins_JNLP
+
+backend Jenkins_JNLP
+        mode tcp
+        option              tcplog
+        timeout             server 15m
+        stick-table type ip size 1 nopurge
+        stick on dst
+        default-server inter 1s
+        server jenkins1 192.168.50.11:5000 check port 8080
+        server jenkins2 192.168.50.12:5000 check port 8080 backup
