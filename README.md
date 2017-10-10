@@ -1,5 +1,8 @@
 # jenkins-failover-demo
-Proof of Concept for redundant setup of Jenkins CI
+
+[![Build Status](https://ci.endocode.com/buildStatus/icon?job=public/jenkins-failover-demo)](https://ci.endocode.com/job/public/jenkins-failover-demo)
+
+Proof of Concept for redundant setup of Jenkins CI 
 
 ![alt text](concept.png "implementation idea")
 
