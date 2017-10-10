@@ -96,11 +96,10 @@ Vagrant.configure("2") do |config|
   config.vm.define "jenkins-slave-linux" do |config|
     config.vm.network "private_network", ip: "192.168.50.20"
 
-    config.vm.provision :shell, inline: "apt-get update", :privileged => true
-    config.vm.provision :shell, inline: "apt-get -y install default-jdk", :privileged => true
-
-    config.vm.provision :shell, inline: "wget -O /var/tmp/swarm-client-3.3.jar https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.3/swarm-client-3.3.jar", :privileged => true
-    config.vm.provision :shell, inline: "java -jar /var/tmp/swarm-client-3.3.jar -autoDiscoveryAddress 192.168.50.255 -executors 1 -name jenkins_slave_linux > /tmp/swarm.log 2>&1 &", :privileged => true
+    config.vm.provision "chef_solo" do |chef|
+      chef.cookbooks_path = "cookbooks"
+      chef.add_recipe "jenkins-swarm-client"
+    end
   end
 
 end
