@@ -84,7 +84,8 @@ Vagrant.configure("2") do |config|
   config.vm.define "loadbalancer" do |config|
     config.vm.network "private_network", ip: "192.168.50.10"
 
-    config.vm.network "forwarded_port", guest: 8080, host: 8080
+    # enable this for access from remote machines
+    #config.vm.network "forwarded_port", guest: 8080, host: 8080
 
     config.vm.provision :shell, inline: "sudo apt-get update"
     config.vm.provision :shell, inline: "sudo apt-get -y install haproxy"
